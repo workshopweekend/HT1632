@@ -107,6 +107,12 @@ void HT1632LEDMatrix::begin(uint8_t type) {
   }
 }
 
+void HT1632LEDMatrix::setScreen(uint8_t color) {
+  for (uint8_t i=0; i<matrixNum; i++) {
+    matrices[i].setScreen(color);
+  }
+}
+
 void HT1632LEDMatrix::clearScreen() {
   for (uint8_t i=0; i<matrixNum; i++) {
     matrices[i].clearScreen();
@@ -417,11 +423,14 @@ void HT1632::writeScreen() {
   digitalWrite(_cs, HIGH);
 }
 
+void HT1632::setScreen(uint8_t color) {
+  for (uint8_t i=0; i<(WIDTH*HEIGHT/8); i++) {
+    ledmatrix[i] = color ? 0xFF : 0;
+  }
+}
 
 void HT1632::clearScreen() {
-  for (uint8_t i=0; i<(WIDTH*HEIGHT/8); i++) {
-    ledmatrix[i] = 0;
-  }
+  setScreen(0);
   writeScreen();
 }
 
@@ -473,8 +482,6 @@ void HT1632::sendcommand(uint8_t cmd) {
 
 
 void HT1632::fillScreen() {
-  for (uint8_t i=0; i<(WIDTH*HEIGHT/8); i++) {
-    ledmatrix[i] = 0xFF;
-  }
+  setScreen(1);
   writeScreen();
 }

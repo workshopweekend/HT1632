@@ -38,6 +38,7 @@ class HT1632 {
   void blink(boolean state);
   void setBrightness(uint8_t pwm);
 
+  void setScreen(uint8_t color);
   void clearScreen();
   void fillScreen();
   void writeScreen();
@@ -62,6 +63,7 @@ class HT1632LEDMatrix : public Print {
 		  uint8_t cs2, uint8_t cs3, uint8_t cs4);
 
  void begin(uint8_t type);
+ void setScreen(uint8_t color);
  void clearScreen(void);
  void fillScreen(void);
  void blink(boolean b);
