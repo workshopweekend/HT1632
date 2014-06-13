@@ -58,16 +58,10 @@ void HT1632LEDMatrix::clrPixel(uint8_t x, uint8_t y) {
   drawPixel(x, y, 0);
 }
 
-void HT1632LEDMatrix::drawPixel(uint8_t x, uint8_t y, uint8_t color) {
-  if (y >= _height) return;
-  if (x >= _width) return;
-
-  uint8_t m;
-  // figure out which matrix controller it is
-  m = x / 24;
-  x %= 24;
-
+uint16_t HT1632LEDMatrix::getIndex(uint8_t x, uint8_t y) {
   uint16_t i;
+
+  x %= 24;
 
   if (x < 8) {
     i = 7;
@@ -86,10 +80,32 @@ void HT1632LEDMatrix::drawPixel(uint8_t x, uint8_t y, uint8_t color) {
 
   i += y * 8;
 
+  return i;
+}
+
+void HT1632LEDMatrix::drawPixel(uint8_t x, uint8_t y, uint8_t color) {
+  if (y >= _height) return;
+  if (x >= _width) return;
+
+  // figure out which matrix controller it is
+  uint8_t m = x / 24;
+  uint16_t i = getIndex(x, y);
+
   if (color) 
     matrices[m].setPixel(i);
   else
     matrices[m].clrPixel(i);
+}
+
+uint8_t HT1632LEDMatrix::getPixel(uint8_t x, uint8_t y) {
+  if (y >= _height) return 0;
+  if (x >= _width) return 0;
+
+  // figure out which matrix controller it is
+  uint8_t m = x / 24;
+  uint16_t i = getIndex(x, y);
+
+  return matrices[m].getPixel(i);
 }
 
 
@@ -390,6 +406,10 @@ void HT1632::setPixel(uint16_t i) {
 
 void HT1632::clrPixel(uint16_t i) {
   ledmatrix[i/8] &= ~_BV(i%8); 
+}
+
+uint8_t HT1632::getPixel(uint16_t i) {
+  return ledmatrix[i/8] & _BV(i%8) > 0;
 }
 
 void HT1632::dumpScreen() {

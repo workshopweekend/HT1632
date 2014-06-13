@@ -34,6 +34,7 @@ class HT1632 {
   
   void clrPixel(uint16_t i);
   void setPixel(uint16_t i);
+  uint8_t getPixel(uint16_t i);
 
   void blink(boolean state);
   void setBrightness(uint8_t pwm);
@@ -74,6 +75,7 @@ class HT1632LEDMatrix : public Print {
 
   void clrPixel(uint8_t x, uint8_t y);
   void setPixel(uint8_t x, uint8_t y);
+  uint8_t getPixel(uint8_t x, uint8_t y);
   void drawPixel(uint8_t x, uint8_t y, uint8_t color);
 
   void drawLine(int8_t x0, int8_t y0, int8_t x1, int8_t y1, uint8_t color);
@@ -102,4 +104,6 @@ class HT1632LEDMatrix : public Print {
   HT1632 *matrices;
   uint8_t matrixNum, _width, _height;
   uint8_t cursor_x, cursor_y, textsize, textcolor;
+  // helper
+  uint16_t getIndex(uint8_t x, uint8_t y);
 };
