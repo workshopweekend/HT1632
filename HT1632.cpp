@@ -409,7 +409,7 @@ void HT1632::clrPixel(uint16_t i) {
 }
 
 uint8_t HT1632::getPixel(uint16_t i) {
-  return ledmatrix[i/8] & _BV(i%8) > 0;
+  return (ledmatrix[i/8] & _BV(i%8)) > 0;
 }
 
 void HT1632::dumpScreen() {
